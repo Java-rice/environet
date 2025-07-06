@@ -56,7 +56,7 @@ export const Navbar = () => {
                       <img
                         src={user.user_metadata?.avatar_url}
                         alt="Profile Picture"
-                        className="h-10 w-10 rounded-full object-cover "
+                        className="h-8 w-8 rounded-full object-cover "
                       />
                     )}
                     <span className="my-auto font-bold">{displayName}</span>
