@@ -1,9 +1,13 @@
-import { Menu, X, CircleUser } from "lucide-react";
+import { Menu, X, CircleUser, Github } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
+import { useAuth } from "../context/AuthContext";
 
 export const Navbar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const { signinWithGithub, signOut, user } = useAuth();
+  const displayName = user?.user_metadata.user_name || user?.email;
+
   return (
     <nav className="fixed top-0 w-full z-40 shadow-sm backdrop-blur-lg">
       <div className="max-w-5xl mx-auto py-4">
@@ -44,9 +48,38 @@ export const Navbar = () => {
 
           {/* Hamburger */}
           <div className="flex gap-4">
-            <button>
-              <CircleUser />
-            </button>
+            <div className="flex gap-4">
+              {user ? (
+                <div className="flex flex-row gap-4 align-middle justify-between">
+                  <div className="flex flex-row gap-2 pr-4 border-3 border-[#4CAF50] rounded-full">
+                    {user.user_metadata?.avatar_url && (
+                      <img
+                        src={user.user_metadata?.avatar_url}
+                        alt="Profile Picture"
+                        className="h-10 w-10 rounded-full object-cover "
+                      />
+                    )}
+                    <span className="my-auto font-bold">{displayName}</span>
+                  </div>
+                  <button
+                    className="cursor-pointer hover:font-bold text-white bg-[#4CAF50] hover:bg-[#4CAF50] rounded-lg h-8 my-auto px-2"
+                    onClick={signOut}
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <button className="cursor-pointer">
+                    <CircleUser />
+                  </button>
+                  <button className="cursor-pointer" onClick={signinWithGithub}>
+                    <Github />
+                  </button>
+                </>
+              )}
+            </div>
+
             <button
               onClick={() => setMenuOpen((prev) => !prev)}
               className="cursor-pointer md:hidden"
