@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   //it will get authentication from github and create a session
   const signinWithGithub = () => {
     supabase.auth.signInWithOAuth({ provider: "github" });
-    toast("User Logged in Sucessfully");
+    toast.success("User Logged in Sucessfully");
   };
 
   const signOut = () => {

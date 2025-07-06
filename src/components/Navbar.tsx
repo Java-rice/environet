@@ -122,6 +122,7 @@ export const Navbar = () => {
                       ? "border-b-2 border-[#4CAF50] text-[#4CAF50]"
                       : ""
                   }`}
+                  onClick={() => setMenuOpen(false)}
                 >
                   Home
                 </Link>
@@ -132,6 +133,7 @@ export const Navbar = () => {
                       ? "border-b-2 border-[#4CAF50] text-[#4CAF50]"
                       : ""
                   }`}
+                  onClick={() => setMenuOpen(false)}
                 >
                   Post
                 </Link>
@@ -142,6 +144,7 @@ export const Navbar = () => {
                       ? "border-b-2 border-[#4CAF50] text-[#4CAF50]"
                       : ""
                   }`}
+                  onClick={() => setMenuOpen(false)}
                 >
                   Community
                 </Link>
@@ -152,6 +155,7 @@ export const Navbar = () => {
                       ? "border-b-2 border-[#4CAF50] text-[#4CAF50]"
                       : ""
                   }`}
+                  onClick={() => setMenuOpen(false)}
                 >
                   Event
                 </Link>
@@ -162,6 +166,7 @@ export const Navbar = () => {
                       ? "border-b-2 border-[#4CAF50] text-[#4CAF50]"
                       : ""
                   }`}
+                  onClick={() => setMenuOpen(false)}
                 >
                   Donate
                 </Link>
