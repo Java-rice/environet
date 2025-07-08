@@ -20,13 +20,19 @@ const buttonVariants = cva(
         charcoal: "bg-[#424242] text-white hover:bg-[#333] border-transparent", // Charcoal
       },
       size: {
-        default: "h-10 py-2 px-4",
-        sm: "h-9 px-2 rounded-md",
+        default: "h-10 py-2",
+        sm: "h-9  rounded-md",
+      },
+      width: {
+        default: "px-4",
+        long: "px-12",
+        small: "px-1",
       },
     },
     defaultVariants: {
       variant: "default",
       size: "default",
+      width: "default",
     },
   }
 );
@@ -42,10 +48,12 @@ interface ButtonProps
 }
 
 // Reusable Button component
-const Button = ({ className, variant, size, ...props }: ButtonProps) => {
+const Button = ({ className, variant, size, width, ...props }: ButtonProps) => {
   return (
     <button
-      className={[buttonVariants({ variant, size }), className].join(" ")}
+      className={[buttonVariants({ variant, size, width }), className].join(
+        " "
+      )}
       {...props}
     />
   );

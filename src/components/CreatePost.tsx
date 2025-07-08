@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { Button } from "./Button";
 import { supabase } from "../supabase-client";
 import React, { useState } from "react";
-import { File } from "lucide-react";
+import { File, Image } from "lucide-react";
 
 // The form data types
 type FormData = {
@@ -36,7 +36,7 @@ const createPost = async (post: FormData) => {
   const { data, error } = await supabase.from("posts").insert({
     title: post.title,
     content: post.content,
-    image_url: imageUrl,
+    img_url: imageUrl,
   });
 
   // if theres an error on data base it will be displayed
@@ -163,44 +163,24 @@ export const CreatePost = () => {
     <form
       onSubmit={handleSubmit(onSubmit)}
       noValidate
-      className="max-w-xl mx-auto p-6 bg-[#FBE9E7] rounded-xl shadow-md space-y-3 border border-gray-200"
+      className="max-w-xl mx-auto p-6 bg-[#FBE9E7] rounded-xl shadow-md space-y-6 border border-gray-200"
     >
-      <h2 className="text-xl font-semibold text-center text-[#4CAF50]">
+      <h2 className="text-3xl font-semibold text-center text-[#4CAF50]">
         Create a Post
       </h2>
 
       {/* Image Upload */}
       <div className="flex flex-col gap-2">
-        {previewUrl && (
+        {previewUrl ? (
           <img
             src={previewUrl}
             alt="Preview"
             className="w-auto max-h-64 object-cover rounded-md mt-2 border"
           />
-        )}
-      </div>
-
-      {/* File Upload - Icon Only */}
-      <div className="flex flex-col gap-2">
-        <label
-          htmlFor="image"
-          className="flex flex-row gap-4 cursor-pointer text-[#4CAF50] hover:text-green-700 transition"
-          title="Upload Image"
-        >
-          <span>
-            <File size={24} />
-          </span>
-          Upload Image
-        </label>
-        <input
-          id="image"
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="hidden"
-        />
-        {errors.image && (
-          <p className="text-red-500 text-sm">{errors.image.message}</p>
+        ) : (
+          <div className="w-full flex justify-center">
+            <Image size={64} />
+          </div>
         )}
       </div>
 
@@ -255,16 +235,41 @@ export const CreatePost = () => {
           <p className="text-red-500 text-sm">{errors.content.message}</p>
         )}
       </div>
+      {/* File Upload - Icon Only */}
+      <div className="flex flex-col gap-2">
+        <label
+          htmlFor="image"
+          className="flex flex-row gap-4 cursor-pointer text-[#4CAF50] hover:text-green-700 transition"
+          title="Upload Image"
+        >
+          <span>
+            <File size={24} />
+          </span>
+          Upload Image
+        </label>
+        <input
+          id="image"
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="hidden"
+        />
+        {errors.image && (
+          <p className="text-red-500 text-sm">{errors.image.message}</p>
+        )}
+      </div>
 
       {/* Submit Button */}
-      <Button
-        type="submit"
-        variant="default"
-        disabled={isSubmitting}
-        className="bg-[#4CAF50] hover:bg-[#43a047] text-white font-semibold py-2 px-4 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {isSubmitting ? "Submitting..." : "Post"}
-      </Button>
+      <div className="flex flex-row justify-center">
+        <Button
+          type="submit"
+          variant="default"
+          width="long"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Submitting..." : "Post"}
+        </Button>
+      </div>
     </form>
   );
 };
