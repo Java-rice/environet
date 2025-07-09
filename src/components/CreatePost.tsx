@@ -5,15 +5,17 @@ import { Button } from "./Button";
 import { supabase } from "../supabase-client";
 import React, { useState } from "react";
 import { File, Image } from "lucide-react";
-
+import { useAuth } from "../context/AuthContext";
+import type { User } from "@supabase/supabase-js";
 // The form data types
 type FormData = {
   title: string;
   content: string;
   image: FileList;
+  avatar_url: string | null;
 };
 
-const createPost = async (post: FormData) => {
+const createPost = async (post: FormData, user: User) => {
   //Create Unique File Extension
   const file = post.image[0];
   const fileExt = file.name.split(".").pop();
@@ -37,6 +39,7 @@ const createPost = async (post: FormData) => {
     title: post.title,
     content: post.content,
     img_url: imageUrl,
+    avatar_url: user?.user_metadata.avatar_url || null,
   });
 
   // if theres an error on data base it will be displayed
@@ -47,6 +50,7 @@ const createPost = async (post: FormData) => {
 export const CreatePost = () => {
   // Preview the URL posted
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const { user } = useAuth();
 
   //Create a useForm with FormData type, it will also show the register, handleSubmit,formState, reset and SetValue
   const {
@@ -64,7 +68,8 @@ export const CreatePost = () => {
 
   //Create mutation function to check what happen onSuccess and onError
   const { mutate } = useMutation({
-    mutationFn: createPost,
+    mutationFn: async ({ data, user }: { data: FormData; user: User }) =>
+      await createPost(data, user),
     onSuccess: () => {
       toast.success("Post submitted successfully");
       setPreviewUrl(null);
@@ -139,7 +144,11 @@ export const CreatePost = () => {
 
   //On submit , it will mutate, and use the function created earlier
   const onSubmit = (data: FormData) => {
-    mutate(data);
+    if (!user) {
+      toast.error("You must be logged in to submit a post.");
+      return;
+    }
+    mutate({ data, user });
   };
 
   // Register the image field manually with validation
