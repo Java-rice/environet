@@ -5,6 +5,7 @@ interface Props {
 }
 import { useQuery } from "@tanstack/react-query";
 import { User } from "lucide-react";
+import { LikeButton } from "./LIkeButton";
 
 const fetchPostByID = async (id: number): Promise<Post> => {
   const { data, error } = await supabase
@@ -63,6 +64,7 @@ export const PostContent = ({ postId }: Props) => {
       <div>
         <p>{data?.content}</p>
       </div>
+      <LikeButton postId={postId} />
     </div>
   );
 };

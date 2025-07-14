@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import type { Post } from "./PostList";
 import { Link } from "react-router";
 import { User } from "lucide-react";
+import { LikeButton } from "./LIkeButton";
 interface Props {
   post: Post;
   key: number;
