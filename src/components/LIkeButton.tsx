@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { supabase } from "../supabase-client";
 import { useAuth } from "../context/AuthContext";
+import { useEffect, useState } from "react";
 interface Props {
   postId: number;
 }
@@ -44,6 +45,24 @@ const vote = async (voteValue: number, postId: number, userId: string) => {
 
 export const LikeButton = ({ postId }: Props) => {
   const { user } = useAuth();
+  const [currentVote, setCurrentVote] = useState<number | null>(null);
+
+  const fetchCurrentVote = async () => {
+    if (!user) return;
+
+    const { data, error } = await supabase
+      .from("votes")
+      .select("*")
+      .eq("post_id", postId)
+      .eq("user_id", user.id)
+      .maybeSingle();
+    if (!error) setCurrentVote(data?.vote ?? null);
+  };
+
+  useEffect(() => {
+    fetchCurrentVote();
+  }, [user, postId]);
+
   const { mutate } = useMutation({
     mutationFn: (voteValue: number) => {
       if (!user) throw new Error("You must be logged in to Vote!");
@@ -57,6 +76,7 @@ export const LikeButton = ({ postId }: Props) => {
             : "Post Disliked successfully"
         }`
       );
+      fetchCurrentVote();
     },
     onError: (error) => {
       toast.error(error.message || "Like failed");
@@ -70,14 +90,22 @@ export const LikeButton = ({ postId }: Props) => {
         className="p-2 rounded-full  cursor-pointer transition duration-200"
         title="Like"
       >
-        <ThumbsUp className="text-gray-500 hover:text-green-500 transition duration-200" />
+        <ThumbsUp
+          className={`text-gray-500 ${
+            currentVote == 1 && "text-green-500"
+          }  hover:text-green-500 transition duration-200`}
+        />
       </button>
       <button
         onClick={() => mutate(-1)}
         className="p-2 rounded-full  cursor-pointer transition duration-200"
         title="Dislike"
       >
-        <ThumbsDown className="text-gray-500 hover:text-red-500 transition duration-200" />
+        <ThumbsDown
+          className={`text-gray-500 ${
+            currentVote == -1 && "text-red-500"
+          } hover:text-red-500 transition duration-200`}
+        />
       </button>
     </div>
   );
