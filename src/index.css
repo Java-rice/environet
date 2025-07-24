@@ -25,3 +25,7 @@
     animation: loading 0s ease infinite;
   }
 }
+
+@theme {
+  --color-chill-400: oklch(0.54,0.43, 117.33);
+}
